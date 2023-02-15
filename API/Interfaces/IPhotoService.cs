@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Http.HttpResults;
+using API.Entities;
 
 namespace API.Interfaces
 {
     public interface IPhotoService
     {
-        void AddPhotoAsync(IFormFile file);         
-        void DeletePhotoAsync(IFormFile file);         
+        Task<PhotoResult> AddPhotoAsync(IFormFile file);         
+        Task<bool> DeletePhotoAsync(string url);         
     }
 }

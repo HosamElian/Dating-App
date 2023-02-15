@@ -21,6 +21,9 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { MemberCardComponent } from './member/member-card/member-card.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { MemberEditComponent } from './member/member-edit/member-edit.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { PhotoEditorComponent } from './member/photo-editor/photo-editor.component';
+
 
 
 @NgModule({
@@ -37,7 +40,8 @@ import { MemberEditComponent } from './member/member-edit/member-edit.component'
     NotFoundComponent,
     ServerErrorComponent,
     MemberCardComponent,
-    MemberEditComponent
+    MemberEditComponent,
+    PhotoEditorComponent,
   ], 
   imports: [
     BrowserAnimationsModule,
@@ -45,11 +49,12 @@ import { MemberEditComponent } from './member/member-edit/member-edit.component'
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    SharedModule   
+    SharedModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi:true},
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi:true}
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi:true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi:true}
   ],
   bootstrap: [AppComponent]
 })

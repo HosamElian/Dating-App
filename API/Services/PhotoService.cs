@@ -1,40 +1,61 @@
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using API.Entities;
 using API.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Services
 {
-    public class PhotoService : IPhotoService
+    public class PhotoService: IPhotoService 
     {
         private readonly  IWebHostEnvironment _hostEnvironment;
+        PhotoResult photoResult = new ();
+
         public PhotoService(IWebHostEnvironment hostEnvironment)
         {
             _hostEnvironment = hostEnvironment;
+            if(_hostEnvironment != null){
+                
+            }
+            
         }
-        public void AddPhotoAsync(IFormFile file)
-        {
-            string wwwRootPath = _hostEnvironment.WebRootPath;
-                if(file != null)
+        public async Task<PhotoResult> AddPhotoAsync(IFormFile file)
+        {     
+                
+                
+                if(file.Length > 0)
                 {
                     string fileName = Guid.NewGuid().ToString();
-                    var uploads = Path.Combine(wwwRootPath, @"images");
+                    string imgFolderUrl = Directory.GetParent(Environment.CurrentDirectory).FullName + @"\client\src\assets\images";
                     var extension = Path.GetExtension(file.FileName);
-                    // if(productVM.Product.ImageUrl != null)
-                    // {
-                    //     var oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
-                    //     if (System.IO.File.Exists(oldImagePath))
-                    //     {
-                    //         System.IO.File.Delete(oldImagePath);
-                    //     }
-                    // }
-                     using (var fileStreams = new FileStream(Path.Combine(uploads, fileName+extension), FileMode.CreateNew))
+               
+                     using (var fileStreams = new FileStream(Path.Combine(imgFolderUrl, fileName+extension), FileMode.CreateNew))
                     {
-                        file.CopyTo(fileStreams);
+                        file.CopyTo(fileStreams); 
                     }
+                    photoResult.IsUploaded = true; 
+                    photoResult.Url = "assets/images/" + fileName+extension ;
+                    photoResult.PublicId = fileName+extension;
+                    return await Task.FromResult(photoResult); 
                 }
+                photoResult.IsUploaded = false; 
+                photoResult.Url = null;
+                photoResult.PublicId = null;
+                return await Task.FromResult(photoResult); 
         }
 
-        public void DeletePhotoAsync(IFormFile file)
-        {
-            throw new NotImplementedException();
+        public async Task<bool> DeletePhotoAsync(string Url)
+        {       string imgFolderUrl = Directory.GetParent(Environment.CurrentDirectory).FullName + @"\client\src\";
+                var oldImagePath = imgFolderUrl + Url;
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                    return await Task.FromResult(true);
+                }
+            return await Task.FromResult(false);
         }
+
     }
+
+    
 }
