@@ -1,5 +1,4 @@
 using API.Data;
-using API.Error;
 using API.Extensions;
 using API.Middleware;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +14,10 @@ builder.Services.AddIdentityService(builder.Configuration);
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 
+
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod()
-    .WithOrigins("https://localhost:4200"));
+    .WithOrigins("https://localhost:4200")
+    .WithExposedHeaders("Pagination"));
 
 app.UseAuthentication(); // do you have valid token 
 app.UseAuthorization(); // you have valid token but what you allow to do 

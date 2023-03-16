@@ -1,8 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.Net;
 using API.Entities;
 using API.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace API.Services
 {
@@ -28,8 +25,7 @@ namespace API.Services
                     string fileName = Guid.NewGuid().ToString();
                     string imgFolderUrl = Directory.GetParent(Environment.CurrentDirectory).FullName + @"\client\src\assets\images";
                     var extension = Path.GetExtension(file.FileName);
-               
-                     using (var fileStreams = new FileStream(Path.Combine(imgFolderUrl, fileName+extension), FileMode.CreateNew))
+                    using (var fileStreams = new FileStream(Path.Combine(imgFolderUrl, fileName+extension), FileMode.CreateNew))
                     {
                         file.CopyTo(fileStreams); 
                     }
